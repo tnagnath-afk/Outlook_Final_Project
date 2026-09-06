@@ -1,0 +1,22 @@
+# secrets
+.env
+
+# virtual environments
+swe_env/
+.venv/
+venv/
+
+# python
+__pycache__/
+*.pyc
+*.pyo
+
+# generated artifacts (rebuild via scripts/init_chroma.py and main.py)
+data/kb/
+data/output/
+scripts/data/
+
+# editors
+.vscode/
+.idea/
+.env
