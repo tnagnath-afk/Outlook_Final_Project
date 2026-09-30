@@ -1,0 +1,10 @@
+agno
+chromadb
+pdfplumber
+python-docx
+pydantic
+streamlit
+groq
+anthropic
+google-genai
+python-dotenv

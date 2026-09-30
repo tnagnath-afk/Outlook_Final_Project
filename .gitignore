@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+swe_env/
+.env/
+
+# Secrets
+.env
+
+# Chroma DB
+data/kb/
+
+# SQLite DB
+data/db/*.db
+
+# Generated Outputs
+data/output/*.json
+
+# Streamlit cache
+.streamlit/
+
+# VS Code
+.vscode/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+data/output/*.json
+!data/output/.gitkeep
+
+data/db/*.db
+!data/db/.gitkeep

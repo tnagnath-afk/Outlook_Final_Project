@@ -1,0 +1,270 @@
+Great. Now test the project in small steps, not all at once.
+
+Step 1: Activate Virtual Environment
+
+Windows PowerShell:
+
+cd power-window-agents
+
+.\venv\Scripts\activate
+
+
+or
+
+venv\Scripts\activate
+
+
+You should see:
+
+(venv) PS C:\...
+
+Step 2: Install Dependencies
+pip install -r requirements.txt
+
+
+If Streamlit wasn't already added:
+
+pip install streamlit
+
+
+For SQLite you need nothing extra because:
+
+import sqlite3
+
+
+is built into Python.
+
+Step 3: Verify Environment Variables
+
+Run:
+
+Get-Content .env
+
+
+Expected:
+
+GEMINI_API_KEY=xxxxx
+
+CHROMA_DB_DIR=data/kb
+
+
+Notice:
+
+Your agents use:
+
+os.getenv("GEMINI_API_KEY")
+
+
+not OpenAI.
+
+So if you only have:
+
+OPENAI_API_KEY=
+
+
+the application will fail.
+
+You need:
+
+GEMINI_API_KEY=your_key_here
+
+Step 4: Initialize Chroma
+
+Run once.
+
+python scripts/init_chroma.py
+
+
+Expected:
+
+ChromaDB 'standards' collection created successfully.
+
+Step 5: Run Main Pipeline
+python main.py
+
+
+Expected flow:
+
+Initializing SQLite database...
+
+Parsing Specification...
+
+Generated XX requirements
+
+Generated XX test cases
+
+Saving to SQLite...
+
+Running Validators...
+
+Building Traceability Matrix...
+
+Calculating Metrics...
+
+PIPELINE SUMMARY
+
+Step 6: Verify Output Files
+
+Check:
+
+data/output/
+
+
+Should contain:
+
+requirements.json
+
+testcases.json
+
+validation_report.json
+
+traceability_matrix.json
+
+metrics.json
+
+Step 7: Verify Database
+
+Check:
+
+data/db/
+
+
+Should contain:
+
+traceability.db
+
+
+Use:
+
+sqlite3 data/db/traceability.db
+
+
+or
+
+DB Browser for SQLite
+
+
+Query:
+
+SELECT count(*) FROM requirements;
+
+Step 8: Run Streamlit Dashboard
+
+From project root:
+
+streamlit run src/dashboard/app.py
+
+
+Expected:
+
+Local URL:
+
+http://localhost:8501
+
+
+Open browser:
+
+http://localhost:8501
+
+
+You should see:
+
+Automotive SWE V-Cycle Assistant
+
+Requirements
+
+Test Cases
+
+Coverage %
+
+Validation Report
+
+Requirements Review
+
+If main.py Fails
+
+Most likely causes:
+
+Error 1
+ModuleNotFoundError
+
+
+Fix:
+
+pip install -r requirements.txt
+
+Error 2
+GEMINI_API_KEY not set
+
+
+Fix:
+
+GEMINI_API_KEY=xxxxx
+
+Error 3
+Collection standards does not exist
+
+
+Fix:
+
+python scripts/init_chroma.py
+
+Error 4
+No module named src.validation
+
+
+Fix:
+
+Ensure folders include:
+
+src/
+ ├── validation/
+ │    ├── __init__.py
+ │    └── validator.py
+
+ ├── persistence/
+ │    ├── __init__.py
+ │    └── sqlite_store.py
+
+ ├── traceability/
+ │    ├── __init__.py
+ │    └── matrix.py
+
+ ├── metrics/
+ │    ├── __init__.py
+ │    └── metrics.py
+
+
+Those __init__.py files are important.
+
+Recommended Execution Order
+
+Every time:
+
+1. activate venv
+
+2. python main.py
+
+3. streamlit run src/dashboard/app.py
+
+
+For your 03 Oct mentor review, the demo flow should be:
+
+OEM Spec
+↓
+Generate Requirements
+↓
+Generate Tests
+↓
+Validator Output
+↓
+SQLite Persistence
+↓
+Traceability Matrix
+↓
+Coverage Dashboard
+↓
+Human Review Screen
+
+
+That storytelling is much stronger than simply opening requirements.json. If you hit any error from main.py, paste the full traceback and I'll help you fix it line by line.
